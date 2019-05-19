@@ -11,21 +11,24 @@ def consume():
     for method_frame, properties, body in channel.consume('mobilityData'):
         print(method_frame, properties, body)
         channel.basic_ack(method_frame.delivery_tag)
-        payload.append()
+        payload.append(body)
 
         if method_frame.delivery_tag == 10:
             break
     return payload
 
-'''
-async def serve():
-    name = await websocket.recv()
+def tratar():
+    pass
 
-    print('con')
-    await websocket.send('teste')
+async def serve():
+    data = consume()
+    resp = tratar(data)
+    con = await websocket.recv()
+
+    await websocket.send(data)
 
 start_server = websockets.serve(serve, 'localhost', 8765)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
-'''
+
 connection.close()
