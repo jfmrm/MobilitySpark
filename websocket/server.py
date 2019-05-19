@@ -2,9 +2,9 @@ import asyncio
 import websockets
 import pika
 
-
 connection = pika.BlockingConnection()
 channel = connection.channel()
+pika.ConnectionParameters('amqp://localhost',5672)
 
 def consume():
     payload = []
