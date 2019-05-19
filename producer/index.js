@@ -1,7 +1,7 @@
 import amqp from './node_modules/amqplib/channel_api';
 
 export function startSending() {
-    return amqp.connect('amqp://localhost')
+    return amqp.connect('amqp://rabbitmq')
         .then((connection) => {
             return connection.createChannel()
         }).then((channel) => {
