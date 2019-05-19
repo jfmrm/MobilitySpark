@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  producer:
+    build: ./producer
+    command: ["npm", "run", "firstStart"]
+    container_name: mobility_producer
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./producer:/api
+      - /producer/node_modules
+networks:
+  default:
