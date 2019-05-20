@@ -24,22 +24,28 @@
     <script>
       var map;
       var marker;
+      var lat;
+      var lng;
+      var ws = new WebSocket("ws://127.0.0.1:8765/");
+
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: -8.0418269, lng: -34.971603},
-          zoom: 8
+          zoom: 12
         });
+
         var hellcife = {lat: -8.0418269, lng: -34.971603};
         marker = new google.maps.Marker({position: hellcife, map: map});
+
+        ws.onmessage = function (event) {
+          data = event.data;
+          lat = parseFloat(data.trim().split(",")[2].toString());
+          lng = parseFloat(data.trim().split(",")[3].toString());
+          marker.setPosition({lat, lng});
+          console.log(lat);
+        }
       }
-      var ws = new WebSocket("ws://127.0.0.1:8765/")
-      ws.onmessage = function (event, marker) {
-        data = event.data;
-        lat = parseFloat(data.trim().split(",")[2].toString());
-        lng = parseFloat(data.trim().split(",")[3].toString());
-        marker.setPosition({lat: lat, lng: lng});
-        console.log(marker)
-      }
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD15smz5fIOXlb6XG4IJKob12LMdcLTox0&callback=initMap"
     async defer></script>
