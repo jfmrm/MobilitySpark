@@ -38,7 +38,7 @@ async def serve(websocket, path):
         for data in payload:
             print(data)
             await websocket.send(', '.join(data))
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.01)
 
         if len(payload) == 0: break
 

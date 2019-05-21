@@ -37,11 +37,21 @@
         var hellcife = {lat: -8.0418269, lng: -34.971603};
         marker = new google.maps.Marker({position: hellcife, map: map});
 
+        var markers = {
+
+        }
         ws.onmessage = function (event) {
           data = event.data;
+          var busId = data.trim().split(",")[0].toString();
           lat = parseFloat(data.trim().split(",")[2].toString());
           lng = parseFloat(data.trim().split(",")[3].toString());
-          marker.setPosition({lat, lng});
+          if (markers[busId] == undefined) {
+            markers[busId] = new google.maps.Marker({position: { lat, lng }, map: map});
+          } else {
+            markers[busId].setPosition({ lat, lng });
+            console.log("moving bus " + busId)
+          }
+          // marker.setPosition({lat, lng});
           console.log(lat);
         }
       }
