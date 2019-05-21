@@ -3,7 +3,7 @@ import websockets
 import pika
 import utm
 
-params = pika.ConnectionParameters('127.0.0.1',5672)
+params = pika.ConnectionParameters('rabbitmq',5672)
 connection = pika.BlockingConnection(params)
 channel = connection.channel()
 
@@ -39,7 +39,7 @@ async def serve(websocket, path):
 
         if len(payload) == 0: break
 
-start_server = websockets.serve(serve, 'localhost', 8765)
+start_server = websockets.serve(serve, '0.0.0.0', 8765)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
 
