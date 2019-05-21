@@ -9,24 +9,27 @@ channel = connection.channel()
 
 def consume():
     payload = []
-    
+
     for method_frame, properties, body in channel.consume('mobilityData'):
-        #print(method_frame, properties, body)
         channel.basic_ack(method_frame.delivery_tag)
         data = Dados(body.decode('utf-8'))
-        payload.append(data)
-        break
+        if len(data) > 0:
+            payload.append(data)
+            break
 
     return payload
 
 def Dados(String):
     Info = []
-    Stringlist = String.split(",")
-    Info.append(Stringlist[0])
-    Info.append(Stringlist[1])
-    GPS = utm.to_latlon(int(Stringlist[6]),int(Stringlist[7]), 25, "L")
-    Info.append(str(GPS[0]))
-    Info.append(str(GPS[1]))
+    try:
+        Stringlist = String.split(",")
+        Info.append(Stringlist[0])
+        Info.append(Stringlist[1])
+        GPS = utm.to_latlon(int(Stringlist[6]),int(Stringlist[7]), 25, "L")
+        Info.append(str(GPS[0]))
+        Info.append(str(GPS[1]))
+    except:
+        print('passing', String)
     return Info
 
 async def serve(websocket, path):

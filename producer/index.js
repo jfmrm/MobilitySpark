@@ -5,12 +5,12 @@ function throwData(data, i, channel) {
     setTimeout(() => {
         console.log(data[i])
         channel.sendToQueue('mobilityData', new Buffer(data[i]));
-        throwData(data, i++, channel)
+        throwData(data, i+1, channel)
     }, 1000)
 }
 
 export function startSending() {
-    return amqp.connect('amqp://rabbitmq')
+    return amqp.connect('amqp://localhost')
         .then((connection) => {
             return connection.createChannel()
         }).then((channel) => {
