@@ -1,10 +1,12 @@
-version: '3.1'
+version: '2'
 
 services:
   rabbitmq:
+    container_name: mobility_mq
     image: "rabbitmq:3.7.14-alpine"
     ports:
-      - "5673:5672"
+      - "5672:5672"
+
   producer:
     build: ./producer
     command: ["npm", "run", "firstStart"]
@@ -15,36 +17,18 @@ services:
       - ./producer:/api
       - /producer/node_modules
       - /producer/data
-    depends_on:
+    links:
       - rabbitmq
-
-  zookeeper:
-    image: zookeeper
-    container_name: zookeeper
-    restart: always
-
-  nimbus:
-    image: storm
-    container_name: nimbus
-    command: storm nimbus
-    depends_on:
-      - zookeeper
-    links:
-      - zookeeper
-    restart: always
+  
+  consumer:
+    build: ./websocket
+    container_name: mobility_consumer
+    command: ["/websocket/wait-for-it.sh", "--timeout=20","producer:3000", "--", "python3", "./server.py"]
+    volumes:
+      - ./websocket:/websocket
     ports:
-      - "6627:6627"
-
-  supervisor:
-    image: storm
-    container_name: supervisor
-    command: storm supervisor
-    depends_on:
-      - nimbus
-      - zookeeper
+      - "8765:8765"
     links:
-      - nimbus
-      - zookeeper
-    restart: always
+      - rabbitmq
 networks:
   default:
