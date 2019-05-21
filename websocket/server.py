@@ -23,9 +23,9 @@ def Dados(String):
     Info = []
     try:
         Stringlist = String.split(",")
-        Info.append(Stringlist[0])
         Info.append(Stringlist[1])
-        GPS = utm.to_latlon(int(Stringlist[6]),int(Stringlist[7]), 25, "L")
+        Info.append(Stringlist[2])
+        GPS = utm.to_latlon(int(Stringlist[7]),int(Stringlist[8]), 25, "L")
         Info.append(str(GPS[0]))
         Info.append(str(GPS[1]))
     except:
